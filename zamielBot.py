@@ -3,8 +3,10 @@ import mongoengine
 from discord.ext import commands
 
 class userMention(mongoengine.Document):
-    mentionFrom = discord.User(Required=True)
-    mentionTo = discord.User(Required=True)
+#    mentionFrom = discord.User(Required=True)
+#   mentionFrom = discord.User(Required=True)
+    mentionTo = mongoengine.StringField(Required=True)
+    mentionFrom = mongoengine.StringField(Required=True)
 
 def __init__():
     mongoengine.connect('discordMentions')
@@ -39,6 +41,11 @@ async def on_message(message):
     await bot.process_commands(message)
 
 __init__()
+test = userMention(mentionTo = "Zamiel", mentionFrom = "Ziv")
+test.save()
+for mention in userMention.objects():
+    print("From:" + mention.mentionFrom)
+    print("To:" + mention.mentionTo)
 with open(".token", 'r') as tokenFile:
     token = tokenFile.read()
     bot.run(token.strip())
